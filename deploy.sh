@@ -14,7 +14,7 @@ mkdir -p dist/api/contents/ dist/files
 cp all.json dist/api/contents/
 cp jupyter-lite.json dist/
 cp config-utils.js dist/
-cp -R custom/ dist/
+cp -R custom/* dist/
 
 # Copy content
 rm -rf dist/files/*
