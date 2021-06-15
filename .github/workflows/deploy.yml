@@ -1,0 +1,61 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fetch the release
+        run: |
+          curl -L https://github.com/jtpio/jupyterlite/releases/download/v0.1.0a0/jupyterlite-app-0.1.0-alpha.0.tgz | tar -xz
+          mv package dist
+      - name: Copy the federated extensions
+        run: |
+          # TODO
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Create all.json
+        run: |
+          pip install jupyter_server
+          python all_generator.py
+      - name: Copy the content
+        run: |
+          mkdir -p dist/api/contents/ dist/files
+          cp all.json dist/api/contents/
+          cp -r content/* dist/files/
+      - name: List the content of the app
+        run: |
+          tree dist
+      - name: Upload (dist)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyterlite-demo dist ${{ github.run_number }}
+          path: ./dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+      - uses: actions/download-artifact@v2
+        with:
+          name: jupyterlite-demo dist ${{ github.run_number }}
+          path: ./dist
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+          branch: gh-pages
+          folder: dist
