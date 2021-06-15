@@ -24,7 +24,7 @@ const LITE_ROOT_ATTR = 'jupyterLiteRoot';
 /**
  * The well-known filename that contains `#jupyter-config-data` and other goodies
  */
-const LITE_FILES = ['jupyter-lite.json', 'jupyter-lite.ipynb'];
+const LITE_FILES = ['jupyter-lite.json'];
 
 /**
  * And this link tag, used like so to load a bundle after configuration.
