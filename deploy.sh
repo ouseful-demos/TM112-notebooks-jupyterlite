@@ -4,7 +4,7 @@
 # Ensure that jupyterlite is installed: ./jupyterlite-install.sh
 
 # Create all.json manifest
-#pip3 install jupyter_server
+pip3 install jupyter_server
 python3 all_generator.py
 
 # Ensure distrribtiuon file directory available
